@@ -1,11 +1,12 @@
 import React from 'react'
-import InputForm from '../mini-components/GarbageForm'
 import { CardWithForm } from '../mini-components/GarbageCard'
+import { GarbageCheckbox } from '../mini-components/GarbageCheckbox'
 
 const AddGarbageDetails = () => {
   return (
     <div>
       <CardWithForm />
+
     </div>
     
   )

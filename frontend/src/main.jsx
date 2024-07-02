@@ -1,10 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import GarbageDetails from './pages/GarbageDetails';
+import App from './App';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+
+  <Routes path = "/" element = {<App/>}>
+    <Route  path="add-garbage-details" element={<GarbageDetails />} />
+  </Routes>

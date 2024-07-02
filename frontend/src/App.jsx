@@ -1,47 +1,16 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+import NavBar from "./components/features/NavBar";
+import React from 'react';
+import './App.css';
+import GarbageDetails from './pages/GarbageDetails';
+
 
 function App() {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link1</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item two</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link2</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item three</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link3</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-    </NavigationMenu>
-
+    <div>
+      <NavBar/>
+      <GarbageDetails/>
+    </div>
   )
-}
+};
 
-export default App
+export default App;

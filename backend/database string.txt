@@ -1,0 +1,1 @@
+mongodb+srv://smartbin23rd:AVDcFUKdHEVKIRY2@smartbin.az3yzqn.mongodb.net/?retryWrites=true&w=majority&appName=SmartBin

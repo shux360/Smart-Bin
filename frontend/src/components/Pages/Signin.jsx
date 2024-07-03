@@ -30,11 +30,11 @@ const Signin = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-green-100 p-6">
+        <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(0, 194, 86, 0.5)', padding: '6rem' }}>
             <Card className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg border border-green-400">
                 <CardHeader className="mb-6">
-                    <CardTitle className="text-2xl font-bold text-center text-green-700">Sign In</CardTitle>
-                    <CardDescription className="text-center text-green-600">Please sign in to your account</CardDescription>
+                    <CardTitle className="text-2xl font-bold text-center text-black">Sign In</CardTitle>
+                    <CardDescription className="text-center text-black">Please sign in to your account</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -54,7 +54,7 @@ const Signin = () => {
                             required 
                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
-                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600">Sign In</Button>
+                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600"style={{ backgroundColor: '#00C256' }}>Sign In</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="mt-4">

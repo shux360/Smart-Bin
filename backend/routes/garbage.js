@@ -1,12 +1,35 @@
 const router = require('express').Router();
 const Garbage = require('../models/garbage');
+const moment = require('moment-timezone');
+
+
+
+//get garbage details by id
+router.get('/get-garbage-details/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const garbage = await Garbage.findById(id);
+
+        res.status(200).json({
+            garbage,
+            message: 'Garbage details retrieved successfully'
+        });
+
+    } catch (error) {
+        console.error('Error getting garbage entry:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 // Adding garbage details
 router.post('/garbage-details', async (req, res) => {
     try {
         console.log(req.body);
-        const {location, categories } = req.body;
+        const { location, categories, date } = req.body;
+        const localDate = moment.tz(date, 'Asia/Colombo').startOf('day');
+        const utcDate = localDate.clone().utc(true); 
+      
         const newGarbage = new Garbage({
 
             location: {
@@ -14,11 +37,12 @@ router.post('/garbage-details', async (req, res) => {
                 city: location.city,
                 province: location.province,
                 country: location.country,
-                postalCode: location.postalCode,
+                postalcode: location.postalcode,
                 // latitude: req.body.location.latitude,
                 // longitude: req.body.location.longitude
             },
-            categories: categories
+            categories: categories,
+            date:utcDate.toDate() 
         });
 
         // Save 
@@ -41,18 +65,22 @@ router.put('/edit-garbage-details/:id', async (req, res) => {
     try {
         console.log(req.body);
         const id = req.params.id;
-        const { location, categories } = req.body;
+        const { location, categories,date } = req.body;
+        
+        const localDate = moment.tz(date, 'Asia/Colombo').startOf('day');
+        const utcDate = localDate.clone().utc(true); 
         const updateGarbage = {
             location: {
                 streetName: location.streetName,
                 city: location.city,
                 province: location.province,
                 country: location.country,
-                postalCode: location.postalCode,
+                postalcode: location.postalcode,
                 // latitude: req.body.location.latitude,
                 // longitude: req.body.location.longitude
             },
-            categories: categories
+            categories: categories,
+            date:utcDate.toDate()
         };
         const updatedGarbage = await Garbage.findByIdAndUpdate(id, updateGarbage, { new: true });
 

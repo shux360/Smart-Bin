@@ -1,47 +1,25 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import AddGarbageDetails from './components/Pages/AddGarbageDetails'
+import Map2 from './components/Pages/Map-test'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Signin from './components/Pages/Signin.jsx';
+import Signup from './components/Pages/Signup.jsx';
+import AddGarbageDetails from './components/Pages/AddGarbageDetails.jsx';
 
-function App() {
+const App = () => {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link1</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item two</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link2</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item three</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link3</NavigationMenuLink>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-
-    </NavigationMenu>
-
-  )
+    <div>
+      <Routes>
+        <Route  path="/test/map" element={<Map2 />} />
+        <Route path="/" element={<Navigate to="/signin" />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/add-garbage-details" element={<AddGarbageDetails />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;

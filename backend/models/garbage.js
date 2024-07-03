@@ -26,9 +26,9 @@ const GarbageSchema = new mongoose.Schema({
             },
             country: {
                 type: String,
-                required: true
+                default: 'Srilanka'
             },
-            postalCode: {
+            postalcode: {
                 type: String,
                 required: true
             },
@@ -44,12 +44,12 @@ const GarbageSchema = new mongoose.Schema({
         },
         categories: [{
             type: String,
-            enum: ['paper', 'polythene', 'food', 'plastic', 'glass'],
+            enum: ['paper', 'polythene', 'foodwaste', 'plastic', 'glass','metal'],
             required: true
         }],
         date: {
             type: Date,
-            default: Date.now
+            required: true
         }
     },
     {timestamps: true}

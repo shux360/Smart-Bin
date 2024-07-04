@@ -6,7 +6,10 @@ const AddGarbageDetails = () => {
   return (
     <div>
       <CardWithForm />
+<<<<<<< Updated upstream
       
+=======
+>>>>>>> Stashed changes
     </div>
     
   )

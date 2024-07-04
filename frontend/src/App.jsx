@@ -5,15 +5,15 @@ import Map2 from './components/Pages/Map-test'
 import Signin from './components/Pages/Signin';
 import Signup from './components/Pages/Signup';
 import AddGarbageDetails from './components/Pages/AddGarbageDetails';
-import HomeLanding from './components/Pages/HomeLanding';
 import Dashboard from './components/Pages/Dashboard';
+import LandPage from '@/components/component/land-page';
 
 const App = () => {
   return (
     <div>
       <Routes>
         <Route  path="/test/map" element={<Map2 />} />
-        <Route path="/" element={<HomeLanding />} />
+        <Route path="/" element={<LandPage/>} />
         <Route path="/signin/:role"  element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-garbage-details" element={<AddGarbageDetails />} />

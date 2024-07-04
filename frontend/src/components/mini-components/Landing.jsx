@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
+ 
 const Landing = () => {
   const buttonStyle = {
     backgroundColor: 'rgb(127, 0, 255)',
@@ -66,5 +66,5 @@ const Landing = () => {
     </div>
   );
 };
-
+<script src="./node_modules/preline/dist/preline.js"></script>
 export default Landing;

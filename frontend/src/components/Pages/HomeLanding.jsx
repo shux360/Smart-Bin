@@ -5,8 +5,10 @@ import Services from './Services';
 const HomeLanding = () => {
   return (
     <div>
+      
       <Landing />
-      <Services />
+      <Services />  
+  
     </div>
 
   );

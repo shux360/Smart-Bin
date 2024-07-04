@@ -46,7 +46,7 @@ router.post("/signin", async (req, res) => {
 });
 
 // Read all users
-router.get("/users", async (req, res) => {
+router.get("/get-users", async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -56,7 +56,7 @@ router.get("/users", async (req, res) => {
 });
 
 // Read a specific user by ID
-router.get("/users/:id", async (req, res) => {
+router.get("/get-user/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
@@ -70,7 +70,7 @@ router.get("/users/:id", async (req, res) => {
 });
 
 // Update a user by ID
-router.put("/users/:id", async (req, res) => {
+router.put("/update-user/:id", async (req, res) => {
   const { id } = req.params;
   const { name, address } = req.body;
   try {
@@ -89,7 +89,7 @@ router.put("/users/:id", async (req, res) => {
 });
 
 // Delete a user by ID
-router.delete("/users/:id", async (req, res) => {
+router.delete("/delete-user/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deletedUser = await User.findByIdAndDelete(id);

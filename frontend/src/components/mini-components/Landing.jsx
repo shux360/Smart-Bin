@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button"
-import{ NavLink } from "react-router-dom"
+import{ Link, NavLink } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,25 +25,35 @@ const Landing = () => {
       <header className="w-full py-4 bg-transparent text-white flex justify-between px-8">
         <img src="/logo.svg" alt="SmartBin Logo" className="h-20" />
         <div className="relative">
-          <Button
-            className="px-4 py-2 font-bold text-black rounded ml-2 mr-4"
-            style={buttonStyle}
-            onMouseEnter={(e) => e.target.style.backgroundColor = hoverStyle.backgroundColor}
-            onMouseLeave={(e) => e.target.style.backgroundColor = buttonStyle.backgroundColor}
-            ><NavLink to={'/signup'}>
-            Join Now</NavLink>
-          </Button>
+          <Link to="/signup"
+            className="px-4 py-2 font-bold text-black border-[3px] border-black hover:text-white hover:border-none hover:bg-black rounded ml-2 mr-4"
+            // style={buttonStyle}
+            // onMouseEnter={(e) => e.target.style.backgroundColor = hoverStyle.backgroundColor}
+            // onMouseLeave={(e) => e.target.style.backgroundColor = buttonStyle.backgroundColor}
+            >
+            Join Now
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger
-              className="px-4 py-2 font-bold text-black rounded ml-2 mr-4"
-              style={buttonStyle}
-              onMouseEnter={(e) => e.target.style.backgroundColor = hoverStyle.backgroundColor}
-              onMouseLeave={(e) => e.target.style.backgroundColor = buttonStyle.backgroundColor}>Sign In</DropdownMenuTrigger>
+              className="px-4 py-2 font-bold text-black rounded ml-2 mr-4 bg-white hover:bg-gray-300"
+              // style={buttonStyle}
+              // onMouseEnter={(e) => e.target.style.backgroundColor = hoverStyle.backgroundColor}
+              // onMouseLeave={(e) => e.target.style.backgroundColor = buttonStyle.backgroundColor}
+              >
+                Sign In</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem ><NavLink to={'/signin'}>User</NavLink></DropdownMenuItem>
-              <DropdownMenuItem>Driver</DropdownMenuItem>
+              <Link to={`/signin/${'user'}`}>
+                <DropdownMenuItem >
+                  User
+                </DropdownMenuItem>
+              </Link>
+              <Link to={`/signin/${'driver'}`}>
+                <DropdownMenuItem >
+                  Driver
+                </DropdownMenuItem>
+              </Link>
 
             </DropdownMenuContent>
           </DropdownMenu>

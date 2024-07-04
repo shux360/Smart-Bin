@@ -12,12 +12,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Label } from '@radix-ui/react-dropdown-menu';
 
 const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [number, setNumber] = useState('');
+    const [phone, setPhone] = useState('');
     const [streetName, setStreetName] = useState('');
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
@@ -41,11 +42,11 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/signup', { 
+            const response = await axios.post('http://localhost:1000/user/signup', { 
                 name, 
                 email, 
                 password, 
-                number, 
+                phone, 
                 streetName, 
                 city, 
                 province, 
@@ -61,29 +62,32 @@ const Signup = () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(0, 194, 86, 0.5)', padding: '6rem' }}>
-            <Card className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg border border-green-400">
-                <CardHeader className="mb-6">
+            <Card className="w-full max-w-md p-2 bg-white shadow-lg rounded-lg border border-green-400">
+                <CardHeader className="mb-0">
                     <CardTitle className="text-2xl font-bold text-center text-black">Sign Up</CardTitle>
                     <CardDescription className="text-center text-black-600">Create your account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <Label htmlFor="name" className='text-sm'>Name</Label>
                         <Input 
                             type="text" 
                             name="name" 
                             placeholder="Name" 
                             onChange={(e) => setName(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        <Label htmlFor="email" className='text-sm'>Email</Label>
                         <Input 
                             type="email" 
                             name="email" 
                             placeholder="Email" 
                             onChange={(e) => setEmail(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        <Label htmlFor="password" className='text-sm'>Password</Label>
                         <Input 
                             type="password" 
                             name="password" 
@@ -92,11 +96,12 @@ const Signup = () => {
                             required 
                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        <Label htmlFor="number" className='text-sm'>Mobile Number</Label>
                         <Input 
                             type="text" 
-                            name="number" 
+                            name="phone" 
                             placeholder="Mobile Number" 
-                            onChange={(e) => setNumber(e.target.value)} 
+                            onChange={(e) => setPhone(e.target.value)} 
                             required 
                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
@@ -129,22 +134,24 @@ const Signup = () => {
                                 <option key={prov} value={prov}>{prov}</option>
                             ))}
                         </select>
-                        <Input 
-                            type="text" 
-                            name="country" 
-                            placeholder="Country" 
-                            onChange={(e) => setCountry(e.target.value)} 
-                            required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                        />
-                        <Input 
-                            type="text" 
-                            name="postalCode" 
-                            placeholder="Postal Code" 
-                            onChange={(e) => setPostalCode(e.target.value)} 
-                            required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                        />
+                        <div className='flex gap-2'>
+                            <Input 
+                                type="text" 
+                                name="country" 
+                                placeholder="Country" 
+                                onChange={(e) => setCountry(e.target.value)} 
+                                required 
+                                className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                            <Input 
+                                type="text" 
+                                name="postalCode" 
+                                placeholder="Postal Code" 
+                                onChange={(e) => setPostalCode(e.target.value)} 
+                                required 
+                                className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                            </div>
                         <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600" style={{ backgroundColor: '#00C256' }}>Sign Up</Button>
 
                     </form>

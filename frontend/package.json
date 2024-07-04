@@ -15,7 +15,12 @@
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-label": "^2.1.0",
+<<<<<<< Updated upstream
     "@radix-ui/react-navigation-menu": "^1.2.0",
+=======
+    "@vis.gl/react-google-maps": "^1.1.0",
+    "axios": "^1.7.2",
+>>>>>>> Stashed changes
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",

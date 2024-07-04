@@ -9,16 +9,35 @@ const router = express.Router();
 
 
 // Create a new driver
-router.post('/drivers', async (req, res) => {
-    const { name, location } = req.body;
+router.post('/add-driver', async (req, res) => {
+    const { name,email, location,truckNumber } = req.body;
     try {
-        const newDriver = new Driver({ name, location });
+        const newDriver = new Driver({ name,email, location,truckNumber });
         await newDriver.save();
         res.status(201).json(newDriver);
     } catch (error) {
         res.status(400).json({ error: 'Error creating driver' });
+        console.log(error.message);
     }
 });
+
+//driver login
+router.post("/signin", async (req, res) => {
+    console.log(req.body);
+    const { email } = req.body;
+  
+    try {
+      const driver = await Driver.findOne({ email });
+      if (!driver) {
+        return res.status(400).json({ error: "Invalid credentials" });
+      }
+  
+      res.json({ message: "Sign in successful", driver });
+    } catch (error) {
+      res.status(400).json({ error: "Error signing in" });
+      console.log(error);
+    }
+  });
 
 
 // Read all drivers
@@ -71,9 +90,9 @@ router.get('/drivers/name/:name', async (req, res) => {
 // Update a driver by ID
 router.put('/drivers/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, location } = req.body;
+    const { name, location,truckNumber } = req.body;
     try {
-        const updatedDriver = await Driver.findByIdAndUpdate(id, { name, location }, { new: true });
+        const updatedDriver = await Driver.findByIdAndUpdate(id, { name, location,truckNumber }, { new: true });
         if (!updatedDriver) {
             return res.status(404).json({ error: 'Driver not found' });
         }

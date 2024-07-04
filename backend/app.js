@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-//require('./connection/connection');
+require('./connection/connection');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -11,9 +11,9 @@ const user = require('./routes/user')
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api',user);
+app.use('/user',user);
 app.use(garbage);
-app.use(driver);
+app.use('/driver',driver);
 
 
 app.listen(process.env.PORT || 5000, () => {

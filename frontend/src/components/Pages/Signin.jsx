@@ -12,18 +12,37 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useParams } from 'react-router-dom';
 
 const Signin = () => {
+    const { role } = useParams();
+    console.log(role);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        localStorage.setItem('role', role);
         try {
-            const response = await axios.post('/api/signin', { email, password });
+            if(role === 'user'){
+                const response = await axios.post('http://localhost:1000/user/signin', { email, password });
+            
+            
             console.log(response.data);
-            // navigate('/dashboard'); // Redirect to dashboard after successful sign-in
+            const usereID = response.data.user._id;
+            navigate(`/dashboard/${usereID}`);// Redirect to dashboard after successful sign-in
+            localStorage.setItem('userId', usereID);
+            } 
+            if(role === 'driver'){
+                const response = await axios.post('http://localhost:1000/driver/signin', { email });
+                console.log(response.data);
+                const driverID = response.data.driver._id;
+                navigate(`/dashboard/${driverID}`);// Redirect to dashboard after successful sign-in
+                localStorage.setItem('driverId', driverID);
+            }
+
+
         } catch (error) {
             console.error('Error signing in:', error);
         }
@@ -46,22 +65,29 @@ const Signin = () => {
                             required 
                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
-                        <Input 
-                            type="password" 
-                            name="password" 
-                            placeholder="Password" 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                        />
-                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600"style={{ backgroundColor: '#00C256' }}>Sign In</Button>
+                       {role === 'user' && (
+                             <Input 
+                             type="password" 
+                             name="password" 
+                             placeholder="Password" 
+                             onChange={(e) => setPassword(e.target.value)} 
+                             required 
+                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                         />
+                       )}
+                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600"style={{ backgroundColor: '#00C256' }}>
+                            Sign In
+                        </Button>
                     </form>
                 </CardContent>
-                <CardFooter className="mt-4">
+                {role === 'user' && (
+                    <CardFooter className="mt-4">
                     <p className="text-sm text-green-500 text-center">
                         Don't have an account? <Link to="/signup" className="text-green-700">Sign up</Link>
                     </p>
                 </CardFooter>
+
+                )}
             </Card>
         </div>
     );

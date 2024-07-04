@@ -6,11 +6,19 @@ const DriverSchema = new mongoose.Schema({
         required: true,
         unique:true
     },
-    location: {
+    email: {
         type: String,
         required: true,
-        
-    }
+        unique: true
+    },
+    location: {
+        type: String,
+        required: true,       
+    },
+    truckNumber: {
+        type: String,
+        required: true
+    },
     
     
 });

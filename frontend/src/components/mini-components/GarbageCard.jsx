@@ -34,21 +34,70 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import moment from 'moment-timezone';
+import { Link } from "react-router-dom";
+
+
+
+// import { useParams } from "react-router-dom";
 
 export function CardWithForm() {
+// const {userId} = useParams();
+const userId = localStorage.getItem('userId');
+const driverId = import.meta.env.VITE_DRIVER_ID;
+const role = localStorage.getItem('role');
+// console.log(userId);
+// console.log('did',driverId);
 
-const [data,setData] = useState({
-    location: {
-      streetName: 'Dalada Veediya',
-      city: 'Kandy',
-      province: 'Central',
-      postalcode: '2500',      
-    },
-    date: '',
-    categories: []
+const [userData,setUserData] = useState({
+    address: {
+        streetName: '',
+        city: '',
+        province: '',
+        postalCode: '',
+    }
 })
+useEffect(() => {
+    const fetch = async () => {
+        const response = await axios.get(
+            `http://localhost:1000/user/get-user/${userId}`
+        );
+        setUserData({
+            address:{
+                streetName: response.data.address.streetName,
+                city: response.data.address.city,
+                province: response.data.address.province,
+                postalCode: response.data.address.postalCode,
+            }
+        });
+    };
+    return() =>fetch();
+}, [userId]);
+
+const [data, setData] = useState({
+  location: {
+      streetName: '',
+      city: '',
+      province: '',
+      postalcode: '',
+  },
+  date: '',
+  categories: []
+});
+
+useEffect(() => {
+  setData({
+      location: {
+          streetName: userData.address.streetName,
+          city: userData.address.city,
+          province: userData.address.province,
+          postalcode: userData.address.postalCode,
+      },
+      date: '',
+      categories: []
+  });
+}, [userData]);
 
 const [isEditing, setIsEditing] = useState(false);
 
@@ -86,8 +135,8 @@ const [isEditing, setIsEditing] = useState(false);
              alert('Please fill all the fields');
          } else{
              const response = await axios.post(
-                 'http://localhost:1000/garbage-details', 
-                 data, 
+                 'http://localhost:1000/garbage-details', {userId,driverId,
+                 data} 
              );
              alert(response.data.message);
              window.location.reload();
@@ -196,7 +245,9 @@ const [isEditing, setIsEditing] = useState(false);
             </form>
         </CardContent>
         <CardFooter className="flex justify-between">
+          <Link to={`/dashboard/${userId}`}>
             <Button variant="outline">Cancel</Button>
+            </Link>
             <Button
               type="submit"
               onClick={handleSubmit}

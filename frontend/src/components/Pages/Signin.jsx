@@ -29,7 +29,7 @@ const Signin = () => {
                 const response = await axios.post('http://localhost:1000/user/signin', { email, password });
             
             
-            console.log(response.data);
+            alert(response.data.message);
             const usereID = response.data.user._id;
             navigate(`/dashboard/${usereID}`);// Redirect to dashboard after successful sign-in
             localStorage.setItem('userId', usereID);

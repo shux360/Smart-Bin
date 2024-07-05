@@ -53,7 +53,7 @@ export function GarbageCheckbox({ onChange }) {
   })
 
   return (
-    <Form {...form} className='bg-orange-50'>
+    <Form {...form} >
       <FormField
         control={form.control}
         name="items"

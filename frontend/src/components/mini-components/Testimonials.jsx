@@ -1,4 +1,5 @@
 import React from 'react';
+import avatar01 from '@/components/img/avatar01.jpg';
 
 function Testimonials() {
   return (
@@ -15,15 +16,16 @@ function Testimonials() {
         <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col items-start space-y-4">
             <img
-              src="/placeholder.svg"
+              src={avatar01}
               width="50"
               height="50"
               alt="Avatar"
               className="rounded-full"
+    
             />
             <div>
-              <p className="text-lg font-medium">John Doe</p>
-              <p className="text-muted-foreground">Waste Management Supervisor</p>
+              <p className="text-lg font-medium ">John Doe</p>
+              <p className="text-muted-foreground ">Waste Management Supervisor</p>
             </div>
             <p className="text-muted-foreground">
               "SmartBin has revolutionized our waste management process. The real-time monitoring and predictive

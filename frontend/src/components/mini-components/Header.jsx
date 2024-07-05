@@ -1,10 +1,11 @@
 import React from 'react';
+import Logo from './logo';
 
 function Header() {
     return (
       <header className="px-4 lg:px-6 h-14 flex items-center">
         <div className="flex items-center">
-          <BinaryIcon className="h-6 w-6 hover:text-orange-600" />
+          <Logo/>
         </div>
         <a className="flex items-center justify-center ml-4" href="#">
           <span className="sr-only">SmartBin</span>
@@ -22,26 +23,26 @@ function Header() {
 
 export default Header;
 
-function BinaryIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="14" y="14" width="4" height="6" rx="2" />
-        <rect x="6" y="4" width="4" height="6" rx="2" />
-        <path d="M6 20h4" />
-        <path d="M14 10h4" />
-        <path d="M6 14h2v6" />
-        <path d="M14 4h2v6" />
-      </svg>
-    )
-  }
+// function BinaryIcon(props) {
+//     return (
+//       <svg
+//         {...props}
+//         xmlns="http://www.w3.org/2000/svg"
+//         width="24"
+//         height="24"
+//         viewBox="0 0 24 24"
+//         fill="none"
+//         stroke="currentColor"
+//         strokeWidth="2"
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       >
+//         <rect x="14" y="14" width="4" height="6" rx="2" />
+//         <rect x="6" y="4" width="4" height="6" rx="2" />
+//         <path d="M6 20h4" />
+//         <path d="M14 10h4" />
+//         <path d="M6 14h2v6" />
+//         <path d="M14 4h2v6" />
+//       </svg>
+//     )
+//   }

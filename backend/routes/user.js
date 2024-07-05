@@ -28,6 +28,23 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+//get garbage details of a user by id
+router.get("/get-garbage-details/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id).populate("garbageIds");
+
+    const garbage = user.garbageIds;
+    return res.status(200).json({
+      garbage,
+      message: "Garbage details retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error getting garbage entry:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Sign In
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
@@ -35,7 +52,7 @@ router.post("/signin", async (req, res) => {
   try {
     const user = await User.findOne({ email, password });
     if (!user) {
-      return res.status(400).json({ error: "Invalid credentials" });
+      return res.json({ message: "Invalid credentials" });
     }
 
     res.json({ message: "Sign in successful", user });

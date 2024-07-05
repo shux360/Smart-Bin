@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
 const GarbageSchema = new mongoose.Schema({
-        // userId: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'User',
-        //     required: true
-        // },
-        // driverId: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'Driver',  
-        //     required: true
-        // },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        driverId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Driver',  
+            required: true
+        },
         location: {
             streetName: {
                 type: String,
@@ -50,7 +50,16 @@ const GarbageSchema = new mongoose.Schema({
         date: {
             type: Date,
             required: true
-        }
+        },
+        pickupStatus: {
+            type: String,
+            enum: ["Didn't Pickup","Pending", "Picked Up"],
+            default: "Didn't Pickup"
+        },
+        issueReported: {
+            type: Boolean,
+            default: false
+        },
     },
     {timestamps: true}
 );

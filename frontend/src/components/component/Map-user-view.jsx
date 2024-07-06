@@ -1,3 +1,5 @@
+//OG
+
 import React, { useState, useEffect, useRef } from 'react';
 import {  
   Map,
@@ -16,15 +18,9 @@ import axios from 'axios';
 
 const MapComponent = () => {
 
-  const [placesAPIloading, setplacesAPIloading] = useState(false);
-  const [maploading, setmaploading] = useState(false);
-
   const map = useMap();  // This hooks give you access to the underlying google.maps.Map instance.
 
-  const userId = localStorage.getItem('userId');   //get user ID and Driver ID from local storage
-  const driverId = localStorage.getItem('driverId');
-
-  const [center, setCenter] = useState({lat : 7.2905715, lng : 80.6337262});
+  const [center, setCenter] = useState({lat : 8.2905715, lng : 80.6337262});
 
    // triggers loading the places library and returns the API Object once complete (the
    // component calling the hook gets automatically re-rendered when this is
@@ -46,7 +42,6 @@ const MapComponent = () => {
     setPlacesService(new placesLibrary.PlacesService(map));
     console.log("places library loaded");
     
-    setplacesAPIloading(false)
   }, [placesLibrary, map]);
 
   useEffect(() => { // new placeService instance load
@@ -55,23 +50,34 @@ const MapComponent = () => {
 
     console.log("passed api loading");
 
-    // async function fetchData () {
-    //   const response = await axios.get(`http://localhost:1000/driver/drivers/${driverId}`)
-    //   console.log(response)
-    // }
+    let driver //details of driver
+    let driver_address
 
-    // fetchData();
+    async function fetchData () {  // synchronus fetching of data
+      try{
+        driver = await axios.get(`http://localhost:1000/driver/drivers/6685b51b63288da41fe6cd52`);
+        driver_address = String(driver.data['location']);  //setting address into a string variable to pass into geocoder function
 
-    const geocoder = new google.maps.Geocoder() //geocoder instance
-    geocoder.geocode({address: "Kandy"}, (results, status) => {
-      if (status === window.google.maps.GeocoderStatus.OK) {
-        setCenter(results[0].geometry.location.toJSON());
-        console.log(results[0].geometry.location.toJSON());
-        setmaploading(false);
-      } else {
-        console.error("Geocode failed: ", status);
+        //find location with geocode api
+        const geocoder = new google.maps.Geocoder() //geocoder instance
+        geocoder.geocode({address: driver_address}, (results, status) => {
+          if (status === window.google.maps.GeocoderStatus.OK) {
+            setCenter(results[0].geometry.location.toJSON());
+            map.setCenter(results[0].geometry.location.toJSON()); // Center the map on the new location
+            console.log(results[0].geometry.location.toJSON());
+          } else {
+            console.error("Geocode failed: ", status);
+          }
+        })
+        
       }
-    })
+      catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData(); //callback
+    
 
     if (driverLocationRef.current && pickupLocationRef.current) {
       const driverAutocomplete = new placesLibrary.Autocomplete(driverLocationRef.current);  //autocomplete widget instance for driver location
@@ -94,8 +100,7 @@ const MapComponent = () => {
       });
 
     }
-
-  }, [placesService, driverId]);
+  }, [placesService]);
 
   const[distance, setDistance] = useState('');   //distance from driver to user home
   const[duration, setDuration] = useState('');   //duration from driver to user home

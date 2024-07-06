@@ -31,7 +31,7 @@ export function DatePickerDemo({ onDateChange }) {
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="mr-2 h-4 w-4 stroke-4 text-orange-400 hover:text-orange-600" />
           {date ? format(date, "PPP") : <span>Pick the date</span>}
         </Button>
       </PopoverTrigger>

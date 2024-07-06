@@ -1,7 +1,9 @@
 import React from 'react';
 import img01 from '@/components/img/img01.svg';
+import { Link } from 'react-router-dom';
 
 function Hero() {
+  const role=localStorage.getItem('role');
   return (
     <section className="w-full py-12 md:py-24 lg:py-64">
       <div className="container px-4 md:px-6">
@@ -24,11 +26,12 @@ function Hero() {
             </div>
             <div className="flex flex-col gap-10 min-[400px]:flex-row">
               
-                <a href="/signin"
+              <Link to= {role == 'user'?'#':`/signin/${'driver'}`} 
                 className="inline-flex h-10 items-center justify-center rounded-md bg-orange-600 px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-orange-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 animate-fade-in-up"
+                
               >
                 Join as a Driver
-              </a>
+              </Link>
               <a href="/signup"
                 className="inline-flex h-10 items-center justify-center rounded-md bg-orange-600 px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-orange-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 animate-fade-in-up"
               >

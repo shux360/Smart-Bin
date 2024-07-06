@@ -148,7 +148,7 @@ const [isEditing, setIsEditing] = useState(false);
 
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-orange-50 ">
         <Card className="w-[500px]">
         <CardHeader>
             <CardTitle>Add Garbage Details</CardTitle>
@@ -236,7 +236,7 @@ const [isEditing, setIsEditing] = useState(false);
                 
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="date">Date</Label>
-                    <DatePickerDemo 
+                    <DatePickerDemo className='text-orange-500'
                     onDateChange={handleDateChange} 
                     />
                 </div>
@@ -251,6 +251,7 @@ const [isEditing, setIsEditing] = useState(false);
             <Button
               type="submit"
               onClick={handleSubmit}
+              className="bg-orange-600 hover:bg-orange-400"
             >Add</Button>
         </CardFooter>
         </Card>

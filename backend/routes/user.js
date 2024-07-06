@@ -15,11 +15,13 @@ router.post("/signup", async (req, res) => {
     province,
     country,
     postalCode,
+    latitude,
+    longitude,
   } = req.body;
   const address = { streetName, city, province, country, postalCode };
 
   try {
-    const newUser = new User({ name, email, password, phone, address });
+    const newUser = new User({ name, email, password, phone, address, latitude, longitude });
     await newUser.save();
     res.status(201).json(newUser);
   } catch (error) {

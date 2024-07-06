@@ -6,9 +6,7 @@ const AddGarbageDetails = () => {
   return (
     <div>
       <CardWithForm />
-      
     </div>
-    
   )
 }
 

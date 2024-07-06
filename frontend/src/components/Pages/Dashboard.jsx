@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
+
 import {
   File,
   Home,
@@ -64,20 +65,115 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import React, { useState,useEffect,Fragment } from "react"
+import axios from 'axios'
 
 const Dashboard = () =>  {
 
     const navigate = useNavigate();
     const role = localStorage.getItem('role');
+   
+    const userId = localStorage.getItem('userId');
+ 
+ 
+    const driverId = localStorage.getItem('driverId');
+ 
+    
     const logout = () => {
         localStorage.clear();
         navigate('/');
     }
 
+     const [garbageDetails, setGarbageDetails] = useState([]);
+     const [allGarbageDetails, setAllGarbageDetails] = useState([]);
+     const [dataChanged, setDataChanged] = useState(false);
+
+     //get all garbage details of a user
+      useEffect(() => {
+        if(role === 'user')
+        {const fetchGarbageDetails = async () => {
+          const response = await axios.get(`http://localhost:1000/user/get-garbage-details/${userId}`);
+          setGarbageDetails(response.data.garbage);
+          console.log('all garbage detatils',response.data);
+        };
+        return () => fetchGarbageDetails();
+        }
+        if(role === 'driver'){
+          const fetchAllGarbageDetails = async () => {
+            const response = await axios.get('http://localhost:1000/get-all-garbage-details');
+            setAllGarbageDetails(response.data.garbage);
+            console.log('all garbages',response.data);
+          };
+          return () => fetchAllGarbageDetails();
+        }
+      }, [userId,driverId,dataChanged]);
+
+      //get all garbage details by the driver
+      // useEffect(() => {
+      //   const fetchAllGarbageDetails = async () => {
+      //     const response = await axios.get('http://localhost:1000/user/get-all-garbage-details');
+      //     // setAllGarbageDetails(response.data.garbage);
+      //     console.log('all garbages',response.data);
+      //   };
+      //   return () => fetchAllGarbageDetails();
+      // }, [userId,dataChanged]);
+
+      const handlePickedUp = async (id) => {
+        try {
+          await axios.put(`http://localhost:1000/garbage/update-pickup-status/${id}`, { status: 'Picked Up' });
+          setDataChanged((prev) => !prev);
+        } catch (err) {
+          console.error('Failed to update pickup status', err);
+        }
+      };
+
+      const handlePending = async (id) => {
+        try {
+          await axios.put(`http://localhost:1000/garbage/update-pickup-status/${id}`, { status: 'Pending' });
+          setDataChanged((prev) => !prev);
+        } catch (err) {
+          console.error('Failed to update pickup status', err);
+        }
+      };
+
+      const handleReportIssue = async (id) => {
+        try {
+          await axios.put(`http://localhost:1000/garbage/report-issue/${id}`);
+          setDataChanged((prev) => !prev);
+        } catch (err) {
+          console.error('Failed to report issue', err);
+        }
+      };
+
+      const handleIssueSolved = async (id) => {
+        try {
+          await axios.put(`http://localhost:1000/garbage/issue-solved/${id}`);
+          setDataChanged((prev) => !prev);
+        } catch (err) {
+          console.error('Failed to mark issue as solved', err);
+        }
+      };
+
+      const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+      };
+
+       // Group garbageDetails by date
+  const groupedByDate = 
+   allGarbageDetails.reduce((acc, item) => {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+        return acc;
+    }, {});
+
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-16 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 py-4">
           <Link
             href="#"
@@ -90,14 +186,14 @@ const Dashboard = () =>  {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                to="/"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Home className="h-5 w-5" />
-                <span className="sr-only">Dashboard</span>
+                <span className="sr-only">Home</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Dashboard</TooltipContent>
+            <TooltipContent side="right">Home</TooltipContent>
           </Tooltip>
         </TooltipProvider>
           <TooltipProvider>
@@ -105,7 +201,7 @@ const Dashboard = () =>  {
             <TooltipTrigger asChild>
               <Link
                 href="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <ShoppingCart className="h-5 w-5" />
                 <span className="sr-only">Orders</span>
@@ -119,7 +215,7 @@ const Dashboard = () =>  {
             <TooltipTrigger asChild>
               <Link
                 href="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                className="flex h-9 w-9 items-center justify-center rounded-lg  text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Package className="h-5 w-5" />
                 <span className="sr-only">Products</span>
@@ -174,7 +270,7 @@ const Dashboard = () =>  {
         </TooltipProvider>
         </nav>
       </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex flex-col sm:gap-4 mt-4 sm:py-4 sm:pl-14">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Sheet>
             <SheetTrigger asChild>
@@ -193,11 +289,11 @@ const Dashboard = () =>  {
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                  href="#"
+                  href="/"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <Home className="h-5 w-5" />
-                  Dashboard
+                  Home
                 </Link>
                 <Link
                   href="#"
@@ -230,26 +326,7 @@ const Dashboard = () =>  {
               </nav>
             </SheetContent>
           </Sheet>
-          <h1 className="font-semibold text-lg">{role.toUpperCase()} DASHBOARD</h1>
-          {/* <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#">Dashboard</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#">Products</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>All Products</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb> */}
+          <h1 className="font-bold ml-10 text-lg">{role=="user"? 'User' : 'Driver'} Dashboard</h1>
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -285,7 +362,7 @@ const Dashboard = () =>  {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="grid flex-1  items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="grid flex-1 mx-8 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
             <div className="flex items-center">
               <TabsList>
@@ -318,315 +395,154 @@ const Dashboard = () =>  {
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button size="sm" variant="outline" className="h-7 gap-1">
+                {/* <Button size="sm" variant="outline" className="h-7 gap-1">
                   <File className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Export
                   </span>
-                </Button>
-                <Link to={'/add-garbage-details'} size="sm" className="h-7 items-center bg-black px-2 hover:bg-gray-700 rounded-md text-white flex gap-1">
+                </Button> */}
+                {role === 'user' && (
+                  <Link to={'/add-garbage-details'} size="sm" className="h-7 items-center bg-black px-2 hover:bg-gray-700 rounded-md text-white flex gap-1">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Add Garbage Details
                   </span>
                 </Link>
+                )}
               </div>
             </div>
             <TabsContent value="all" >
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
-                  <CardTitle>Daily Garbage Pickusp</CardTitle>
+                  <CardTitle>Daily Garbage Pickups</CardTitle>
                   <CardDescription>
                     view all your pickup details.
                   </CardDescription>
                 </CardHeader>
                 <CardContent >
-                  <Table >
-                    <TableHeader>
-                      <TableRow >
-                        <TableHead className="hidden w-[100px] sm:table-cell">
-                          <span className="sr-only">Image</span>
-                        </TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Total Sales
-                        </TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Created at
-                        </TableHead>
-                        <TableHead>
-                          <span className="sr-only">Actions</span>
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          Laser Lemonade Machine
-                        </TableCell>
+                {role === 'user' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Truck Number</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {garbageDetails.map((item) => (
+                      <TableRow key={item._id}
+                      style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}
+                      >
+                        <TableCell >{formatDate(item.date)}</TableCell>
+                        <TableCell className="font-medium hidden md:table-cell">s2416</TableCell>
                         <TableCell>
-                          <Badge variant="outline">Draft</Badge>
-                        </TableCell>
-                        <TableCell>$499.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          25
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-07-12 10:42 AM
+                          <Badge variant="outline" className='bg-white p-1 px-2'>
+                            {item.pickupStatus}
+                          </Badge>
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
+                              <Button aria-haspopup="true" size="icon" variant="ghost" >
                                 <MoreHorizontal className="h-4 w-4" />
                                 <span className="sr-only">Toggle menu</span>
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                              {item.issueReported && (
+                                <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                              )}
                               <DropdownMenuItem>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
+                        
+                        {item.issueReported && (
+                            <TableCell>
+                              <span role="img" aria-label="reported">🚩</span>
+                            </TableCell>
+                          )}
                       </TableRow>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          Hypernova Headphones
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Active</Badge>
-                        </TableCell>
-                        <TableCell>$129.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          100
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-10-18 03:21 PM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          AeroGlow Desk Lamp
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Active</Badge>
-                        </TableCell>
-                        <TableCell>$39.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          50
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-11-29 08:15 AM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          TechTonic Energy Drink
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">Draft</Badge>
-                        </TableCell>
-                        <TableCell>$2.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          0
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-12-25 11:59 PM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          Gamer Gear Pro Controller
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Active</Badge>
-                        </TableCell>
-                        <TableCell>$59.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          75
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2024-01-01 12:00 AM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="hidden sm:table-cell">
-                          <img
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          />
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          Luminous VR Headset
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Active</Badge>
-                        </TableCell>
-                        <TableCell>$199.99</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          30
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2024-02-14 02:14 PM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                    ))}
+                  </TableBody>
+                </Table>
+                )}
+                {role === 'driver' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Pickup Location</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+            {Object.entries(groupedByDate).map(([date, items]) => (
+              <Fragment key={date}>
+                {items.map((item, index) => (
+                  <TableRow
+                    key={item._id}
+                    className='hover:bg-transparent'
+                  >
+                    {index === 0 && <TableCell  rowSpan={items.length}>{date}</TableCell>}
+                    <TableCell 
+                      className="font-medium hidden md:table-cell"
+                      style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}
+                    >
+                      {item.location.streetName},{item.location.city},{item.location.province}...
+                    </TableCell>
+                    <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                      <Badge variant="outline" className='bg-white p-1 px-2'>
+                        {item.pickupStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button aria-haspopup="true" size="icon" variant="ghost" className="button-no-outline">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                          {item.issueReported && (
+                            <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                    {item.issueReported && (
+                      <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                        <span role="img" aria-label="reported">🚩</span>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </Fragment>
+            ))}
+          </TableBody>
+                </Table>
+                )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
                     Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                    products
+                    
                   </div>
                 </CardFooter>
               </Card>

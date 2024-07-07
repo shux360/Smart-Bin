@@ -46,7 +46,7 @@ const User_home = () => {
 
   async function fetchData (driver) {  // function to fetch data of respective driver for user (in this case built to just one driver for now)
     try{
-      const response = await axios.get(`http://localhost:1000/driver/drivers/6685b51b63288da41fe6cd52`);
+      const response = await axios.get(`http://localhost:1000/driver/drivers/6685b51b63288da41fe6cd52`);  // ** Driver data is a hardcoded fetch. Must change this in next phase **
       driver.email = response.data['email'];
       driver.name = response.data['name'];
       driver.truckNumber = response.data['truckNumber'];
@@ -59,12 +59,10 @@ const User_home = () => {
 
   async function fetchData_user () { // function to fetch data of current user
     try{
-      const response = await axios.get(`http://localhost:1000/user/get-user/6685a281f9da2e379ead16c5`);
-      console.log(response.data.address)
+      const response = await axios.get(`http://localhost:1000/user/get-user/668a54e86310287e4777fcb4`);
       const address = response.data.address; // get user address
       // Parse address object into a single string
       setUser_address(`${address.streetName}, ${address.city}, ${address.province}, ${address.country}, ${address.postalCode}`);
-      console.log(user_address);
     }
     catch (error) {
       console.log(error);
@@ -128,17 +126,6 @@ const User_home = () => {
               </tr>
             </tbody>
           </table>
-        </div>
-        
-        <h4 className="text-l font-semibold text-black flex items-center mb-2">
-          <FiClock className="mr-2" /> Estimated Arrival
-        </h4>
-        <div style={cardStyle}>
-          <p className="text-sm">
-            <span>Route Distance: 23 km</span>
-            <span style={{ margin: '0 10px', borderLeft: '1px solid black', height: '1em' }}></span>
-            <span>Estimated Time: 10 min</span>
-          </p>
         </div>
         
         <h4 className="text-l font-semibold text-black flex items-center mb-2">

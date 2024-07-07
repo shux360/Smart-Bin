@@ -14,6 +14,7 @@ import {
   Settings,
   ShoppingCart,
   Users2,
+  Compass,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -200,10 +201,10 @@ const Dashboard = () =>  {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                to="/mapview"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
-                <ShoppingCart className="h-5 w-5" />
+                <Compass className="h-5 w-5" />
                 <span className="sr-only">Orders</span>
               </Link>
             </TooltipTrigger>

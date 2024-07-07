@@ -59,7 +59,9 @@ const User_home = () => {
 
   async function fetchData_user () { // function to fetch data of current user
     try{
-      const response = await axios.get(`http://localhost:1000/user/get-user/668a54e86310287e4777fcb4`);
+      
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
       const address = response.data.address; // get user address
       // Parse address object into a single string
       setUser_address(`${address.streetName}, ${address.city}, ${address.province}, ${address.country}, ${address.postalCode}`);

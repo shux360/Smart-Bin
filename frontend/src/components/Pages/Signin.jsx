@@ -49,8 +49,8 @@ const Signin = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(0, 194, 86, 0.5)', padding: '6rem' }}>
-            <Card className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg border border-green-400">
+        <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(255,247,237,1)', padding: '6rem' }}>
+            <Card className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg border border-orange-400">
                 <CardHeader className="mb-6">
                     <CardTitle className="text-2xl font-bold text-center text-black">Sign In</CardTitle>
                     <CardDescription className="text-center text-black">Please sign in to your account</CardDescription>
@@ -63,7 +63,7 @@ const Signin = () => {
                             placeholder="Email" 
                             onChange={(e) => setEmail(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                        {role === 'user' && (
                              <Input 
@@ -72,18 +72,18 @@ const Signin = () => {
                              placeholder="Password" 
                              onChange={(e) => setPassword(e.target.value)} 
                              required 
-                             className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                             className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                          />
                        )}
-                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-6 hover:bg-green-600"style={{ backgroundColor: '#00C256' }}>
+                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600"style={{ backgroundColor: '#00C256' }}>
                             Sign In
                         </Button>
                     </form>
                 </CardContent>
                 {role === 'user' && (
                     <CardFooter className="mt-4">
-                    <p className="text-sm text-green-500 text-center">
-                        Don't have an account? <Link to="/signup" className="text-green-700">Sign up</Link>
+                    <p className="text-sm text-orange-500 text-center">
+                        Don't have an account? <Link to="/signup" className="text-black">Sign up</Link>
                     </p>
                 </CardFooter>
 

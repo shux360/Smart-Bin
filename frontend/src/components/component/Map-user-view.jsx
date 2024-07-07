@@ -154,7 +154,7 @@ const MapComponent = () => {
         )}
         {center && (
           <AdvancedMarker position={center} > 
-            <Pin background={'blue'} glyphColor={'#000'} borderColor={'#000'} />
+            <Pin background={'yellow'} glyphColor={'#000'} borderColor={'#000'} />
           </AdvancedMarker>
         )}
         <MapControl position={ControlPosition.LEFT_CENTER}>

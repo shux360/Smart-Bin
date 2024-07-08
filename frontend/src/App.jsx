@@ -7,6 +7,7 @@ import Signup from './components/Pages/Signup';
 import AddGarbageDetails from './components/Pages/AddGarbageDetails';
 import HomeLanding from './components/Pages/HomeLanding';
 import Dashboard from './components/Pages/Dashboard';
+import IssueReporting from './components/Pages/IssueReporting';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-garbage-details" element={<AddGarbageDetails />} />
         <Route path="/dashboard/:id" element={<Dashboard />} />
+        <Route path="/issuereporting" element={<IssueReporting />} />
       </Routes>
     </div>
   );

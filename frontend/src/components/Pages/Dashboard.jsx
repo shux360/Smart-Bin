@@ -330,6 +330,12 @@ const Dashboard = () =>  {
                     Add Garbage Details
                   </span>
                 </Link>
+                <Link to={'/issuereporting'} size="sm" className="h-7 items-center bg-black px-2 hover:bg-gray-700 rounded-md text-white flex gap-1">
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Issues
+                  </span>
+                </Link>
               </div>
             </div>
             <TabsContent value="all" >

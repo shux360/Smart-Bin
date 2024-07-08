@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 
+
 import {
   File,
   Home,
@@ -69,6 +70,7 @@ import {
 import React, { useState,useEffect,Fragment } from "react"
 import axios from 'axios'
 
+
 const Dashboard = () =>  {
 
     const navigate = useNavigate();
@@ -85,9 +87,21 @@ const Dashboard = () =>  {
         navigate('/');
     }
 
+    // /get-user/:id
+
+    const fetchUserDetails = async () => {
+      const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+      setUserDetails(response.data.user);
+      setIsProfileOpen(true);
+    };
+    
+
+
      const [garbageDetails, setGarbageDetails] = useState([]);
      const [allGarbageDetails, setAllGarbageDetails] = useState([]);
      const [dataChanged, setDataChanged] = useState(false);
+     const [isProfileOpen, setIsProfileOpen] = useState(false);
+     const [userDetails, setUserDetails] = useState(null);
 
      //get all garbage details of a user
       useEffect(() => {
@@ -173,7 +187,7 @@ const Dashboard = () =>  {
 
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen w-full flex-col bg-orange-50">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-16 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 py-4">
           <Link
@@ -355,6 +369,8 @@ const Dashboard = () =>  {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel className='justify-center flex'>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <Link to={'/add-user-details'}><DropdownMenuItem className='justify-center flex'><button>Profile</button></DropdownMenuItem></Link>
+              
               <DropdownMenuItem className='justify-center flex'>Settings</DropdownMenuItem>
               <DropdownMenuItem className='justify-center flex'>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -362,6 +378,7 @@ const Dashboard = () =>  {
               
             </DropdownMenuContent>
           </DropdownMenu>
+          
         </header>
         <main className="grid flex-1 mx-8 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
@@ -550,8 +567,15 @@ const Dashboard = () =>  {
             </TabsContent>
           </Tabs>
         </main>
+        
+
+      
       </div>
     </div>
   )
 }
 export default Dashboard
+
+
+
+

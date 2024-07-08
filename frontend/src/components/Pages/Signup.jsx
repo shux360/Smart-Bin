@@ -99,8 +99,8 @@ const Signup = () => {
     ];
 
     return (
-        <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(0, 194, 86, 0.5)', padding: '6rem' }}>
-            <Card className="w-full max-w-md p-2 bg-white shadow-lg rounded-lg border border-green-400">
+        <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(255,247,237,1)', padding: '6rem' }}>
+            <Card className="w-full max-w-md p-2 bg-white shadow-lg rounded-lg border border-orange-400">
                 <CardHeader className="mb-0">
                     <CardTitle className="text-2xl font-bold text-center text-black">Sign Up</CardTitle>
                     <CardDescription className="text-center text-black-600">Create your account</CardDescription>
@@ -115,8 +115,9 @@ const Signup = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)} 
                             required 
-                            className="block w-full border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                        />
+
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+           />
                         <Label htmlFor="email" className='text-sm'>Email</Label>
                         <Input 
                             type="email" 
@@ -125,7 +126,7 @@ const Signup = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)} 
                             required 
-                            className="block w-full border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <Label htmlFor="password" className='text-sm'>Password</Label>
                         <Input 
@@ -135,7 +136,7 @@ const Signup = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <Label htmlFor="number" className='text-sm'>Mobile Number</Label>
                         <Input 
@@ -145,9 +146,9 @@ const Signup = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <CardDescription className="mt-4 text-green-600">Address</CardDescription>
+                        <CardDescription className="mt-4 text-black">Address</CardDescription>
                         <Input 
                             type="text" 
                             name="streetName" 
@@ -155,7 +156,7 @@ const Signup = () => {
                             value={streetName}
                             onChange={(e) => setStreetName(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <Input 
                             type="text" 
@@ -164,14 +165,14 @@ const Signup = () => {
                             value={city}
                             onChange={(e) => setCity(e.target.value)} 
                             required 
-                            className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <select 
                             name="province" 
                             value={province} 
                             onChange={(e) => setProvince(e.target.value)} 
                             required
-                            className="block w-full p-3 border border-green-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         >
                             <option value="">Select Province</option>
                             {provinces.map((prov) => (
@@ -186,7 +187,7 @@ const Signup = () => {
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)} 
                                 required 
-                                className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
                             <Input 
                                 type="text" 
@@ -195,14 +196,13 @@ const Signup = () => {
                                 value={postalCode}
                                 onChange={(e) => setPostalCode(e.target.value)} 
                                 required 
-                                className="block w-full p-3 border border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
-                        </div>
-                        <Button type="button" onClick={handleGetLocation} className="w-full bg-green-500 text-white p-2 rounded mt-4 flex items-center justify-center hover:bg-green-600" style={{ backgroundColor: '#00C256', fontSize: '0.875rem', padding: '0.75rem' }} >
-                            <FiMapPin className="mr-2" style={{ fontSize: '1.25rem' }} />
-                            Get Location
-                        </Button>
-                        <Button type="submit" className="w-full bg-green-500 text-white p-3 rounded mt-4 hover:bg-green-600" style={{ backgroundColor: '#00C256' }}>Sign Up</Button>
+
+                            </div>
+                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600" >Sign Up</Button>
+
+
                     </form>
                 </CardContent>
             </Card>

@@ -7,6 +7,8 @@ import Signup from './components/Pages/Signup';
 import AddGarbageDetails from './components/Pages/AddGarbageDetails';
 import Dashboard from './components/Pages/Dashboard';
 import LandPage from '@/components/component/land-page';
+import SetLocation from './components/Pages/SetLocation';
+import User_home from './components/Pages/User-Home';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-garbage-details" element={<AddGarbageDetails />} />
         <Route path="/dashboard/:id" element={<Dashboard />} />
+        <Route path="/set-location" element={<SetLocation />} />
+        <Route path="/mapview" element={<User_home />} />
       </Routes>
     </div>
   );

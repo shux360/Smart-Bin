@@ -167,6 +167,7 @@ const Directions = () => {
             </p>
           </div>
 
+          {/* Route Details */}
           <div className='bg-primary-foreground h-20 rounded-xl shadow-lg flex items-center justify-between p-6 my-12'>
             <div className='inline-block space-y-2'>
               <p className='text-lg font-normal'>Route distance</p>

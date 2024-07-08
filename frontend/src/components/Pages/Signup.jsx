@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiMapPin } from 'react-icons/fi';
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -24,20 +24,20 @@ const Signup = () => {
     const [province, setProvince] = useState('');
     const [country, setCountry] = useState('');
     const [postalCode, setPostalCode] = useState('');
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
 
     const navigate = useNavigate();
 
-    const provinces = [
-        'Central Province', 
-        'Eastern Province', 
-        'Northern Province', 
-        'Southern Province', 
-        'Western Province',
-        'North Western Province', 
-        'North Central Province', 
-        'Uva Province', 
-        'Sabaragamuwa Province'
-    ];
+    const saveFormData = () => {
+        const formData = { name, email, password, phone, streetName, city, province, country, postalCode };
+        localStorage.setItem('signupFormData', JSON.stringify(formData));
+    };
+
+    const handleGetLocation = () => {
+        saveFormData();
+        navigate('/set-location');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,14 +51,52 @@ const Signup = () => {
                 city, 
                 province, 
                 country, 
-                postalCode 
+                postalCode,
+                longitude,
+                latitude
             });
             console.log(response.data);
+            localStorage.clear(); // Clear the entire local storage
             navigate('/signin'); 
         } catch (error) {
             console.error('Error signing up:', error);
         }
     };
+
+    useEffect(() => {
+        // Get coordinates from localStorage
+        const storedLatitude = JSON.parse(localStorage.getItem('userLatitude'));
+        const storedLongitude = JSON.parse(localStorage.getItem('userLongitude'));
+        console.log(storedLatitude, storedLongitude); // { latitude: 40.7128, longitude: -74.0060 }
+        setLatitude(storedLatitude);
+        setLongitude(storedLongitude);
+
+        // Get form data from localStorage
+        const storedFormData = JSON.parse(localStorage.getItem('signupFormData'));
+        if (storedFormData) {
+            setName(storedFormData.name);
+            setEmail(storedFormData.email);
+            setPassword(storedFormData.password);
+            setPhone(storedFormData.phone);
+            setStreetName(storedFormData.streetName);
+            setCity(storedFormData.city);
+            setProvince(storedFormData.province);
+            setCountry(storedFormData.country);
+            setPostalCode(storedFormData.postalCode);
+        }
+    }, []);
+
+    const provinces = [
+        'Central Province', 
+        'Eastern Province', 
+        'Northern Province', 
+        'Southern Province', 
+        'Western Province',
+        'North Western Province', 
+        'North Central Province', 
+        'Uva Province', 
+        'Sabaragamuwa Province'
+    ];
 
     return (
         <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'rgba(255,247,237,1)', padding: '6rem' }}>
@@ -74,15 +112,18 @@ const Signup = () => {
                             type="text" 
                             name="name" 
                             placeholder="Name" 
+                            value={name}
                             onChange={(e) => setName(e.target.value)} 
                             required 
+
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
+           />
                         <Label htmlFor="email" className='text-sm'>Email</Label>
                         <Input 
                             type="email" 
                             name="email" 
                             placeholder="Email" 
+                            value={email}
                             onChange={(e) => setEmail(e.target.value)} 
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -92,6 +133,7 @@ const Signup = () => {
                             type="password" 
                             name="password" 
                             placeholder="Password" 
+                            value={password}
                             onChange={(e) => setPassword(e.target.value)} 
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -101,6 +143,7 @@ const Signup = () => {
                             type="text" 
                             name="phone" 
                             placeholder="Mobile Number" 
+                            value={phone}
                             onChange={(e) => setPhone(e.target.value)} 
                             required 
                             className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -110,6 +153,7 @@ const Signup = () => {
                             type="text" 
                             name="streetName" 
                             placeholder="Street Name" 
+                            value={streetName}
                             onChange={(e) => setStreetName(e.target.value)} 
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -118,6 +162,7 @@ const Signup = () => {
                             type="text" 
                             name="city" 
                             placeholder="City" 
+                            value={city}
                             onChange={(e) => setCity(e.target.value)} 
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -139,6 +184,7 @@ const Signup = () => {
                                 type="text" 
                                 name="country" 
                                 placeholder="Country" 
+                                value={country}
                                 onChange={(e) => setCountry(e.target.value)} 
                                 required 
                                 className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -147,12 +193,15 @@ const Signup = () => {
                                 type="text" 
                                 name="postalCode" 
                                 placeholder="Postal Code" 
+                                value={postalCode}
                                 onChange={(e) => setPostalCode(e.target.value)} 
                                 required 
                                 className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
+
                             </div>
                         <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600" >Sign Up</Button>
+
 
                     </form>
                 </CardContent>

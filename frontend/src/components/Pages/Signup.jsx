@@ -13,6 +13,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@radix-ui/react-dropdown-menu';
+import { Link } from 'react-router-dom';
+
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -57,7 +59,7 @@ const Signup = () => {
             });
             console.log(response.data);
             localStorage.clear(); // Clear the entire local storage
-            navigate('/signin'); 
+            navigate(`/signin/${'user'}`); 
         } catch (error) {
             console.error('Error signing up:', error);
         }
@@ -198,9 +200,18 @@ const Signup = () => {
                                 required 
                                 className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
+                            
 
                             </div>
-                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600" >Sign Up</Button>
+                            <Button type="button" onClick={handleGetLocation} className="w-full bg-green-500 text-white p-2 rounded mt-4 flex items-center justify-center hover:bg-green-600" style={{ backgroundColor: '#00C256', fontSize: '0.875rem', padding: '0.75rem' }} >
+                            <FiMapPin className="mr-2" style={{ fontSize: '1.25rem' }} />
+                            Pin Location
+                            </Button>
+
+                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600" >
+                            
+                        Sign Up
+                        </Button>
 
 
                     </form>

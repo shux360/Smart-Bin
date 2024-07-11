@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-
+import IssueReporting from "./IssueReporting"
 
 import {
   File,
@@ -69,6 +69,7 @@ import {
 } from "@/components/ui/tooltip"
 import React, { useState,useEffect,Fragment } from "react"
 import axios, { all } from 'axios'
+import { MessageCircleWarning } from 'lucide-react';
 
 
 const Dashboard = () =>  {
@@ -286,8 +287,8 @@ const Dashboard = () =>  {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/driver-home-page"
-                className="flex h-9 w-9 items-center justify-center rounded-lg  text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                to="/driver-home-page"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Package className="h-5 w-5" />
                 <span className="sr-only">Products</span>
@@ -314,14 +315,14 @@ const Dashboard = () =>  {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                to="/issuereporting"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
-                <LineChart className="h-5 w-5" />
-                <span className="sr-only">Analytics</span>
+                <MessageCircleWarning  className="h-5 w-5" />
+                <span className="sr-only">Issues</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Analytics</TooltipContent>
+            <TooltipContent side="right">Issues</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         </nav>
@@ -376,7 +377,7 @@ const Dashboard = () =>  {
                 </Link>
                 <Link
                   href="#"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <Package className="h-5 w-5" />
                   Products
@@ -387,6 +388,13 @@ const Dashboard = () =>  {
                 >
                   <Users2 className="h-5 w-5" />
                   Customers
+                </Link>
+                <Link
+                  href="/issuereporting"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <MessageCircleWarning className="h-5 w-5"/>
+                  Issues
                 </Link>
                 <Link
                   href="#"

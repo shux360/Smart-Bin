@@ -92,7 +92,7 @@ export function ReportForm() {
                     <form>
                         <div className="grid w-full items-center gap-4">
 
-                            <div className="flex flex-col space-y-3 ">
+                            <div className="flex flex-col space-y-3">
                                 <Label htmlFor="name">Your Name</Label>
                                 <Input
                                     name="name"
@@ -102,7 +102,7 @@ export function ReportForm() {
                                         ...data,
                                         name: e.target.value
                                     })}
-                                    className="border-gray-400"
+                                    className="border-gray-400 focus-ring-2 focus-ring-orange-500"
                                 />
                                 <Label htmlFor="issueType">Type of Issue</Label>
                                 <Select
@@ -234,6 +234,7 @@ export function ReportForm() {
                 <CardFooter className="flex justify-between">
                     <Button variant="outline">Cancel</Button>
                     <Button
+                        className="bg-orange-500 text-white hover:bg-orange-600"
                         type="submit"
                         onClick={handleSubmit}
                     >Add</Button>

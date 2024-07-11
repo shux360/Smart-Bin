@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiMapPin } from 'react-icons/fi';
 
@@ -57,7 +57,7 @@ const Signup = () => {
             });
             console.log(response.data);
             localStorage.clear(); // Clear the entire local storage
-            navigate('/signin'); 
+            navigate('/signin/${user}'); 
         } catch (error) {
             console.error('Error signing up:', error);
         }
@@ -106,8 +106,8 @@ const Signup = () => {
                     <CardDescription className="text-center text-black-600">Create your account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <Label htmlFor="name" className='text-sm'>Name</Label>
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                        <Label htmlFor="name" className='text-sm font-bold'>Name</Label>
                         <Input 
                             type="text" 
                             name="name" 
@@ -116,9 +116,9 @@ const Signup = () => {
                             onChange={(e) => setName(e.target.value)} 
                             required 
 
-                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="block w-full   border-orange-300 rounded focus:outline-orange-600 focus:ring-2 focus:ring-orange-500"
            />
-                        <Label htmlFor="email" className='text-sm'>Email</Label>
+                        <Label htmlFor="email" className='text-sm font-bold'>Email</Label>
                         <Input 
                             type="email" 
                             name="email" 
@@ -128,7 +128,7 @@ const Signup = () => {
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <Label htmlFor="password" className='text-sm'>Password</Label>
+                        <Label htmlFor="password" className='text-sm font-bold'>Password</Label>
                         <Input 
                             type="password" 
                             name="password" 
@@ -138,7 +138,7 @@ const Signup = () => {
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <Label htmlFor="number" className='text-sm'>Mobile Number</Label>
+                        <Label htmlFor="number" className='text-sm font-bold'>Mobile Number</Label>
                         <Input 
                             type="text" 
                             name="phone" 
@@ -148,7 +148,7 @@ const Signup = () => {
                             required 
                             className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <CardDescription className="mt-4 text-black">Address</CardDescription>
+                        <CardDescription className="mt-4 text-black font-bold">Address</CardDescription>
                         <Input 
                             type="text" 
                             name="streetName" 
@@ -172,9 +172,9 @@ const Signup = () => {
                             value={province} 
                             onChange={(e) => setProvince(e.target.value)} 
                             required
-                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="block w-full p-2 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         >
-                            <option value="">Select Province</option>
+                            <option value="" className='hover:bg-orange-600'>Select Province</option>
                             {provinces.map((prov) => (
                                 <option key={prov} value={prov}>{prov}</option>
                             ))}
@@ -199,10 +199,9 @@ const Signup = () => {
                                 className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
 
-                            </div>
-                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600" >Sign Up</Button>
-
-
+                        </div>
+                        <Button onClick={handleGetLocation} className="w-full bg-orange-400 text-black p-3 rounded mt-6 hover:bg-orange-500" >Pin Location <FiMapPin className="inline-block ml-2" /></Button>
+                        <Button type="submit" className="w-full bg-orange-400 text-black p-3 rounded mt-6 hover:bg-orange-500">Sign Up</Button>
                     </form>
                 </CardContent>
             </Card>

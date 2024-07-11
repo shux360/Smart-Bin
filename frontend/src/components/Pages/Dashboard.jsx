@@ -66,7 +66,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import React, { useState,useEffect,Fragment } from "react"
-import axios from 'axios'
+import axios, { all } from 'axios'
 
 const Dashboard = () =>  {
 
@@ -87,6 +87,7 @@ const Dashboard = () =>  {
      const [garbageDetails, setGarbageDetails] = useState([]);
      const [allGarbageDetails, setAllGarbageDetails] = useState([]);
      const [dataChanged, setDataChanged] = useState(false);
+     const [filter, setFilter] = useState({all: true,issues: false,noIssues: false});
 
      //get all garbage details of a user
       useEffect(() => {
@@ -170,17 +171,73 @@ const Dashboard = () =>  {
         return acc;
     }, {});
 
+    const groupedByDatePicked = allGarbageDetails.reduce((acc, item) => {
+      if (item.pickupStatus === 'Picked Up') {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+      }
+      return acc;
+    }, {});
+
+    const groupedByDatePending = allGarbageDetails.reduce((acc, item) => {
+      
+      if (item.pickupStatus === 'Pending') {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+      }
+      return acc;
+    }, {});
+
+    const groupedByDateIncomplete = allGarbageDetails.reduce((acc, item) => {
+      if (item.pickupStatus === "Didn't Pickup") {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+      }
+      return acc;
+    }, {});
+
+    const groupedByDateIssues = allGarbageDetails.reduce((acc, item) => {
+      if (item.issueReported) {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+      }
+      return acc;
+    }, {});
+
+    const groupedByDateNoIssues = allGarbageDetails.reduce((acc, item) => {
+      if (!item.issueReported) {
+        const date = formatDate(item.date);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(item);
+      }
+      return acc;
+    }, {});
+
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-16 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 py-4">
+        <nav className="flex flex-col items-center gap-4 px-2 py-4 ">
           <Link
             href="#"
-            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-orange-600  text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
-            <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Acme Inc</span>
+            <Package2 className="h-4 w-4 transition-all  group-hover:scale-110" />
+            <span className="sr-only ">Acme Inc</span>
           </Link>
           <TooltipProvider>
           <Tooltip>
@@ -362,15 +419,15 @@ const Dashboard = () =>  {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="grid flex-1 mx-8 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="grid flex-1 mx-8 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 ">
           <Tabs defaultValue="all">
-            <div className="flex items-center">
-              <TabsList>
+            <div className="flex items-center ">
+              <TabsList >
                 <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="draft">Draft</TabsTrigger>
-                <TabsTrigger value="archived" className="hidden sm:flex">
-                  Archived
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsTrigger value="pending">Pending</TabsTrigger>
+                <TabsTrigger value="incomplete" className="hidden sm:flex">
+                Incomplete
                 </TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
@@ -385,13 +442,25 @@ const Dashboard = () =>  {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
-                      Active
+                    <DropdownMenuCheckboxItem 
+                       checked={filter.all}
+                       onCheckedChange={() => setFilter({all: true,issues: false,noIssues: false})}
+                    >
+                      All
                     </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Archived
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem 
+                       checked={filter.issues}
+                       onCheckedChange={() => setFilter({all: false,issues: true,noIssues: false})}
+                    >
+                      Issues
+                    </DropdownMenuCheckboxItem>
+                    
+                    <DropdownMenuCheckboxItem
+                        checked={filter.noIssues}
+                        onCheckedChange={() => setFilter({all: false,issues: false,noIssues: true})}
+                    >
+                      No Issues
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -402,7 +471,7 @@ const Dashboard = () =>  {
                   </span>
                 </Button> */}
                 {role === 'user' && (
-                  <Link to={'/add-garbage-details'} size="sm" className="h-7 items-center bg-black px-2 hover:bg-gray-700 rounded-md text-white flex gap-1">
+                  <Link to={'/add-garbage-details'} size="sm" className="h-7 items-center bg-orange-600 px-2 hover:bg-green-700 rounded-md text-white flex gap-1">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Add Garbage Details
@@ -435,7 +504,7 @@ const Dashboard = () =>  {
                   <TableBody>
                     {garbageDetails.map((item) => (
                       <TableRow key={item._id}
-                      style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}
+                      style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
                       >
                         <TableCell >{formatDate(item.date)}</TableCell>
                         <TableCell className="font-medium hidden md:table-cell">s2416</TableCell>
@@ -488,7 +557,8 @@ const Dashboard = () =>  {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-            {Object.entries(groupedByDate).map(([date, items]) => (
+            {Object.entries(filter.all ? groupedByDate : filter.issues ? groupedByDateIssues : groupedByDateNoIssues)
+            .map(([date, items]) => (
               <Fragment key={date}>
                 {items.map((item, index) => (
                   <TableRow
@@ -498,16 +568,16 @@ const Dashboard = () =>  {
                     {index === 0 && <TableCell  rowSpan={items.length}>{date}</TableCell>}
                     <TableCell 
                       className="font-medium hidden md:table-cell"
-                      style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}
+                      style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
                     >
                       {item.location.streetName},{item.location.city},{item.location.province}...
                     </TableCell>
-                    <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                    <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
                       <Badge variant="outline" className='bg-white p-1 px-2'>
                         {item.pickupStatus}
                       </Badge>
                     </TableCell>
-                    <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                    <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost" className="button-no-outline">
@@ -527,7 +597,7 @@ const Dashboard = () =>  {
                       </DropdownMenu>
                     </TableCell>
                     {item.issueReported && (
-                      <TableCell style={{ backgroundColor: item.issueReported ? '#fcdede' : 'transparent' }}>
+                      <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
                         <span role="img" aria-label="reported">🚩</span>
                       </TableCell>
                     )}
@@ -547,6 +617,449 @@ const Dashboard = () =>  {
                 </CardFooter>
               </Card>
             </TabsContent>
+
+
+            <TabsContent value="completed" >
+              <Card x-chunk="dashboard-06-chunk-0">
+                <CardHeader>
+                  <CardTitle>Completed Pickups</CardTitle>
+                  <CardDescription>
+                    view all picked up details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent >
+                {role === 'user' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Truck Number</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {garbageDetails.map((item) => (
+                      
+                      <TableRow key={item._id}
+                        style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                      >
+                        {item.pickupStatus === 'Picked Up' && (
+                          <>
+                            <TableCell >{formatDate(item.date)}</TableCell>
+                            <TableCell className="font-medium hidden md:table-cell">s2416</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className='bg-white p-1 px-2'>
+                                {item.pickupStatus}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost" >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {item.issueReported && (
+                                    <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                                  )}
+                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>                           
+                            
+                            {item.issueReported && (
+                              <TableCell>
+                                <span role="img" aria-label="reported">🚩</span>
+                              </TableCell>
+                            )}
+                          </>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                )}
+                {role === 'driver' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Pickup Location</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+            {Object.entries(groupedByDatePicked).map(([date, items]) => (
+              <Fragment key={date}>
+                {items.map((item, index) => (
+                  <TableRow
+                    key={item._id}
+                    className='hover:bg-transparent'
+                  >
+                    {item.pickupStatus === 'Picked Up' &&(
+                      <>
+                      {index === 0 && <TableCell  rowSpan={items.length}>{date}</TableCell>}
+                        <TableCell 
+                          className="font-medium hidden md:table-cell"
+                          style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                        >
+                          {item.location.streetName},{item.location.city},{item.location.province}...
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <Badge variant="outline" className='bg-white p-1 px-2'>
+                            {item.pickupStatus}
+                          </Badge>
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button aria-haspopup="true" size="icon" variant="ghost" className="button-no-outline">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                              {item.issueReported && (
+                                <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                              )}
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                        {item.issueReported && (
+                          <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                            <span role="img" aria-label="reported">🚩</span>
+                          </TableCell>
+                        )}
+                      
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </Fragment>
+            ))}
+          </TableBody>
+                </Table>
+                )}
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
+                    
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="pending" >
+              <Card x-chunk="dashboard-06-chunk-0">
+                <CardHeader>
+                  <CardTitle>Pending Pickups</CardTitle>
+                  <CardDescription>
+                    view all pending pickup details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent >
+                {role === 'user' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Truck Number</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {garbageDetails.map((item) => (
+                      
+                      <TableRow key={item._id}
+                        style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                      >
+                        {item.pickupStatus === 'Pending' && (
+                          <>
+                            <TableCell >{formatDate(item.date)}</TableCell>
+                            <TableCell className="font-medium hidden md:table-cell">s2416</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className='bg-white p-1 px-2'>
+                                {item.pickupStatus}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost" >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {item.issueReported && (
+                                    <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                                  )}
+                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>                           
+                            
+                            {item.issueReported && (
+                              <TableCell>
+                                <span role="img" aria-label="reported">🚩</span>
+                              </TableCell>
+                            )}
+                          </>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                )}
+                {role === 'driver' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Pickup Location</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+            {Object.entries(groupedByDatePending).map(([date, items]) => (
+              <Fragment key={date}>
+                {items.map((item, index) => (
+                  <TableRow
+                    key={item._id}
+                    className='hover:bg-transparent'
+                  >
+                    {item.pickupStatus === 'Pending' &&(
+                      <>
+                      {index === 0 && <TableCell  rowSpan={items.length}>{date}</TableCell>}
+                        <TableCell 
+                          className="font-medium hidden md:table-cell"
+                          style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                        >
+                          {item.location.streetName},{item.location.city},{item.location.province}...
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <Badge variant="outline" className='bg-white p-1 px-2'>
+                            {item.pickupStatus}
+                          </Badge>
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button aria-haspopup="true" size="icon" variant="ghost" className="button-no-outline">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                              {item.issueReported && (
+                                <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                              )}
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                        {item.issueReported && (
+                          <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                            <span role="img" aria-label="reported">🚩</span>
+                          </TableCell>
+                        )}
+                      
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </Fragment>
+            ))}
+          </TableBody>
+                </Table>
+                )}
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
+                    
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="incomplete" >
+              <Card x-chunk="dashboard-06-chunk-0">
+                <CardHeader>
+                  <CardTitle>Incomplete Pickups</CardTitle>
+                  <CardDescription>
+                    view all incomplete pickup details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent >
+                {role === 'user' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Truck Number</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {garbageDetails.map((item) => (
+                      
+                      <TableRow key={item._id}
+                        style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                      >
+                        {item.pickupStatus === "Didn't Pickup" && (
+                          <>
+                            <TableCell >{formatDate(item.date)}</TableCell>
+                            <TableCell className="font-medium hidden md:table-cell">s2416</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className='bg-white p-1 px-2'>
+                                {item.pickupStatus}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost" >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {item.issueReported && (
+                                    <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                                  )}
+                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>                           
+                            
+                            {item.issueReported && (
+                              <TableCell>
+                                <span role="img" aria-label="reported">🚩</span>
+                              </TableCell>
+                            )}
+                          </>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                )}
+                {role === 'driver' && (
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden md:table-cell">Pickup Location</TableHead>
+                      <TableHead>Pickup Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+            {Object.entries(groupedByDateIncomplete).map(([date, items]) => (
+              <Fragment key={date}>
+                {items.map((item, index) => (
+                  <TableRow
+                    key={item._id}
+                    className='hover:bg-transparent'
+                  >
+                    {item.pickupStatus === "Didn't Pickup" &&(
+                      <>
+                      {index === 0 && <TableCell  rowSpan={items.length}>{date}</TableCell>}
+                        <TableCell 
+                          className="font-medium hidden md:table-cell"
+                          style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
+                        >
+                          {item.location.streetName},{item.location.city},{item.location.province}...
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <Badge variant="outline" className='bg-white p-1 px-2'>
+                            {item.pickupStatus}
+                          </Badge>
+                        </TableCell>
+                        <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button aria-haspopup="true" size="icon" variant="ghost" className="button-no-outline">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
+                              {item.issueReported && (
+                                <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
+                              )}
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                        {item.issueReported && (
+                          <TableCell style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}>
+                            <span role="img" aria-label="reported">🚩</span>
+                          </TableCell>
+                        )}
+                      
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </Fragment>
+            ))}
+          </TableBody>
+                </Table>
+                )}
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
+                    
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
           </Tabs>
         </main>
       </div>

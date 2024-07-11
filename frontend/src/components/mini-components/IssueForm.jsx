@@ -23,24 +23,74 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import moment from 'moment-timezone';
+import { Link } from "react-router-dom";
 
 export function ReportForm() {
-
-    const [data, setData] = useState({
+    const userId = localStorage.getItem('userId');
+    const [userData,setUserData] = useState({
         name: '',
-        location: {
+        address: { 
             streetName: '',
             city: '',
             province: '',
-            postalcode: '',
+            postalCode: '',
+        }
+    })
+    useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+            console.log('response', response);
+            setUserData({
+              name: response.data.name,
+              address: {
+                streetName: response.data.address.streetName,
+                city: response.data.address.city,
+                province: response.data.address.province,
+                postalCode: response.data.address.postalCode,
+              },
+            });
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
+        };
+        if (userId) {
+          fetchUserData();
+        }
+      }, [userId]);
+    
+      useEffect(() => {
+        console.log('userData', userData);
+        setData({
+          name: userData.name,
+          location: {
+            streetName: userData.address.streetName,
+            city: userData.address.city,
+            province: userData.address.province,
+            postalcode: userData.address.postalCode,
+          },
+          date: '',
+          categories: [],
+          issueType: '',
+          otherIssue: '',
+        });
+      }, [userData]);
+    
+      const [data, setData] = useState({
+        name: '',
+        location: {
+          streetName: '',
+          city: '',
+          province: '',
+          postalcode: '',
         },
         date: '',
         categories: [],
         issueType: '',
-        otherIssue: ''
-    })
+        otherIssue: '',
+      });
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -82,7 +132,7 @@ export function ReportForm() {
 
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center my-8 items-center min-h-screen">
             <Card className="w-[500px]">
                 <CardHeader>
                     <CardTitle>Report your Issue</CardTitle>
@@ -232,7 +282,8 @@ export function ReportForm() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline">Cancel</Button>
+                    <Button variant="outline">
+                        <Link to={`/dashboard/${userId}`}>Cancel</Link></Button>
                     <Button
                         className="bg-orange-500 text-white hover:bg-orange-600"
                         type="submit"

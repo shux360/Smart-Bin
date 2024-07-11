@@ -28,7 +28,7 @@ const App = () => {
         <Route path="/set-location" element={<SetLocation />} />
         <Route path="/mapview" element={<User_home />} />
         <Route path="/driver-home-page" element={<DriversHomePage />} />
-        <Route path="/issuereporting" element={<IssueReporting />} />
+        <Route path="/issuereporting/:id" element={<IssueReporting />} />
       </Routes>
     </div>
   );

@@ -14,6 +14,7 @@ import {
   Search,
   Settings,
   ShoppingCart,
+  CircleAlert, 
   Users2,
   Compass,
 } from "lucide-react"
@@ -124,6 +125,14 @@ const Dashboard = () =>  {
           return () => fetchAllGarbageDetails();
         }
       }, [userId,driverId,dataChanged]);
+
+      const filteredGarbageDetails = garbageDetails.filter(item => {
+        if (filter.all) return true;
+        if (filter.issues) return item.issueReported;
+        if (filter.noIssues) return !item.issueReported;
+        return false;
+      });
+      
 
       //get all garbage details by the driver
       // useEffect(() => {
@@ -273,31 +282,31 @@ const Dashboard = () =>  {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                to="/mapview"
+                {...role === 'user' ? { to: "/mapview" } : { to: '/driver-home-page' }}
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Compass className="h-5 w-5" />
-                <span className="sr-only">Orders</span>
+                <span className="sr-only">Track the route</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Orders</TooltipContent>
+            <TooltipContent side="right">Track the route</TooltipContent>
           </Tooltip>
         </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                to="/driver-home-page"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                to={`/issuereporting/${userId}`}
+                className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-muted-foreground hover:text-foreground md:h-8 md:w-8"
               >
-                <Package className="h-5 w-5" />
-                <span className="sr-only">Products</span>
+                <CircleAlert className="h-5 w-5" />
+                <span className="sr-only">{role==='user'?'Report Issues':'View Issues'}</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Products</TooltipContent>
+            <TooltipContent side="right">Report Issues</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <TooltipProvider>
+        {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -324,7 +333,7 @@ const Dashboard = () =>  {
             </TooltipTrigger>
             <TooltipContent side="right">Issues</TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
         <TooltipProvider>
@@ -373,16 +382,16 @@ const Dashboard = () =>  {
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  Orders
+                  Track the route
                 </Link>
                 <Link
                   href="#"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-5 w-5" />
-                  Products
+                  <CircleAlert className="h-5 w-5" />
+                  Report Issues
                 </Link>
-                <Link
+                {/* <Link
                   href="#"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
@@ -402,7 +411,7 @@ const Dashboard = () =>  {
                 >
                   <LineChart className="h-5 w-5" />
                   Settings
-                </Link>
+                </Link> */}
               </nav>
             </SheetContent>
           </Sheet>
@@ -528,7 +537,7 @@ const Dashboard = () =>  {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {garbageDetails.map((item) => (
+                    {filteredGarbageDetails.map((item) => (
                       <TableRow key={item._id}
                       style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
                       >
@@ -551,11 +560,15 @@ const Dashboard = () =>  {
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                             {
+                              !item.issueReported  &&(
+                                <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                              )
+                             }
                               {item.issueReported && (
                                 <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                               )}
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -618,7 +631,7 @@ const Dashboard = () =>  {
                           {item.issueReported && (
                             <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                           )}
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -667,7 +680,7 @@ const Dashboard = () =>  {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {garbageDetails.map((item) => (
+                    {filteredGarbageDetails.map((item) => (
                       
                       <TableRow key={item._id}
                         style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
@@ -693,11 +706,15 @@ const Dashboard = () =>  {
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                   <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
                                   <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {
+                                  !item.issueReported  &&(
+                                    <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                    )
+                                  }
                                   {item.issueReported && (
                                     <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                                   )}
-                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                  {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>                           
@@ -763,7 +780,7 @@ const Dashboard = () =>  {
                               {item.issueReported && (
                                 <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                               )}
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -814,7 +831,7 @@ const Dashboard = () =>  {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {garbageDetails.map((item) => (
+                    {filteredGarbageDetails.map((item) => (
                       
                       <TableRow key={item._id}
                         style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
@@ -840,11 +857,15 @@ const Dashboard = () =>  {
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                   <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
                                   <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {
+                                    !item.issueReported  &&(
+                                    <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  )
+                                   }
                                   {item.issueReported && (
                                     <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                                   )}
-                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                  {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>                           
@@ -910,7 +931,7 @@ const Dashboard = () =>  {
                               {item.issueReported && (
                                 <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                               )}
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -961,7 +982,7 @@ const Dashboard = () =>  {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {garbageDetails.map((item) => (
+                    {filteredGarbageDetails.map((item) => (
                       
                       <TableRow key={item._id}
                         style={{ backgroundColor: item.issueReported ? '#ffedd5' : 'transparent' }}
@@ -987,11 +1008,15 @@ const Dashboard = () =>  {
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                   <DropdownMenuItem onClick={() => handlePickedUp(item._id)}>Picked Up</DropdownMenuItem>
                                   <DropdownMenuItem onClick={() => handlePending(item._id)}>Pending</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                  {
+                                  !item.issueReported  &&(
+                                    <DropdownMenuItem onClick={() => handleReportIssue(item._id)}>Report Issue</DropdownMenuItem>
+                                    )
+                                  }
                                   {item.issueReported && (
                                     <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                                   )}
-                                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                                  {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>                           
@@ -1057,7 +1082,7 @@ const Dashboard = () =>  {
                               {item.issueReported && (
                                 <DropdownMenuItem onClick={() => handleIssueSolved(item._id)}>Issue Solved</DropdownMenuItem>
                               )}
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              {/* <DropdownMenuItem>Delete</DropdownMenuItem> */}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>

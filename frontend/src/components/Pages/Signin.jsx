@@ -75,7 +75,7 @@ const Signin = () => {
                              className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                          />
                        )}
-                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600"style={{ backgroundColor: '#00C256' }}>
+                        <Button type="submit" className="w-full bg-orange-500 text-black p-3 rounded mt-6 hover:bg-orange-600">
                             Sign In
                         </Button>
                     </form>
@@ -83,7 +83,7 @@ const Signin = () => {
                 {role === 'user' && (
                     <CardFooter className="mt-4">
                     <p className="text-sm text-orange-500 text-center">
-                        Don't have an account? <Link to="/signup" className="text-black">Sign up</Link>
+                        Don't have an account? <Link to="/signup" className="text-black hover:font-bold">Sign up</Link>
                     </p>
                 </CardFooter>
 

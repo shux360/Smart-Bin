@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiMapPin } from 'react-icons/fi';
 
@@ -108,8 +108,8 @@ const Signup = () => {
                     <CardDescription className="text-center text-black-600">Create your account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <Label htmlFor="name" className='text-sm'>Name</Label>
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                        <Label htmlFor="name" className='text-sm font-bold'>Name</Label>
                         <Input 
                             type="text" 
                             name="name" 
@@ -118,9 +118,9 @@ const Signup = () => {
                             onChange={(e) => setName(e.target.value)} 
                             required 
 
-                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="block w-full   border-orange-300 rounded focus:outline-orange-600 focus:ring-2 focus:ring-orange-500"
            />
-                        <Label htmlFor="email" className='text-sm'>Email</Label>
+                        <Label htmlFor="email" className='text-sm font-bold'>Email</Label>
                         <Input 
                             type="email" 
                             name="email" 
@@ -130,7 +130,7 @@ const Signup = () => {
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <Label htmlFor="password" className='text-sm'>Password</Label>
+                        <Label htmlFor="password" className='text-sm font-bold'>Password</Label>
                         <Input 
                             type="password" 
                             name="password" 
@@ -140,7 +140,7 @@ const Signup = () => {
                             required 
                             className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <Label htmlFor="number" className='text-sm'>Mobile Number</Label>
+                        <Label htmlFor="number" className='text-sm font-bold'>Mobile Number</Label>
                         <Input 
                             type="text" 
                             name="phone" 
@@ -150,7 +150,7 @@ const Signup = () => {
                             required 
                             className="block w-full p-3 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <CardDescription className="mt-4 text-black">Address</CardDescription>
+                        <CardDescription className="mt-4 text-black font-bold">Address</CardDescription>
                         <Input 
                             type="text" 
                             name="streetName" 
@@ -174,9 +174,9 @@ const Signup = () => {
                             value={province} 
                             onChange={(e) => setProvince(e.target.value)} 
                             required
-                            className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="block w-full p-2 border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                         >
-                            <option value="">Select Province</option>
+                            <option value="" className='hover:bg-orange-600'>Select Province</option>
                             {provinces.map((prov) => (
                                 <option key={prov} value={prov}>{prov}</option>
                             ))}
@@ -200,8 +200,6 @@ const Signup = () => {
                                 required 
                                 className="block w-full  border border-orange-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
-                            
-
                             </div>
                             <Button type="button" onClick={handleGetLocation} className="w-full bg-green-500 text-white p-2 rounded mt-4 flex items-center justify-center hover:bg-green-600" style={{ backgroundColor: '#00C256', fontSize: '0.875rem', padding: '0.75rem' }} >
                             <FiMapPin className="mr-2" style={{ fontSize: '1.25rem' }} />
@@ -212,8 +210,6 @@ const Signup = () => {
                             
                         Sign Up
                         </Button>
-
-
                     </form>
                 </CardContent>
             </Card>

@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route path="/set-location" element={<SetLocation />} />
         <Route path="/mapview" element={<User_home />} />
-        <Route path="/driverHomePage" element={<DriversHomePage />} />
+        <Route path="/driver-home-page" element={<DriversHomePage />} />
       </Routes>
     </div>
   );

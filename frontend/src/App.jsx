@@ -10,6 +10,7 @@ import Dashboard from './components/Pages/Dashboard';
 import LandPage from '@/components/component/land-page';
 import SetLocation from './components/Pages/SetLocation';
 import User_home from './components/Pages/User-Home';
+import DriversHomePage from './components/Pages/DriversHomePage';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route path="/set-location" element={<SetLocation />} />
         <Route path="/mapview" element={<User_home />} />
+        <Route path="/driver-home-page" element={<DriversHomePage />} />
       </Routes>
     </div>
   );

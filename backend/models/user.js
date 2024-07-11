@@ -1,3 +1,4 @@
+const { lang } = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -16,6 +17,14 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
+        required: true
+    },
+    latitude: {
+        type: Number,
+        required: true
+    },
+    longitude: {
+        type: Number,
         required: true
     },
     address: {
@@ -39,15 +48,7 @@ const UserSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        //not sure if this is needed
-        // latitude: {
-        //     type: Number,
-        //     required: true
-        // },
-        // longitude: {
-        //     type: Number,
-        //     required: true
-        // }
+        
     },
     garbageIds: [{
         type: mongoose.Schema.Types.ObjectId,

@@ -93,7 +93,7 @@ const MapComponent = () => {
 
     async function fetchData () {  // synchronus fetching of data from driver
       try{
-        const response = await axios.get(`http://localhost:1000/driver/drivers/6685b51b63288da41fe6cd52`);  // ** Driver data is a hardcoded fetch. Must change this in next phase **
+        const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/drivers/6685b51b63288da41fe6cd52`);  // ** Driver data is a hardcoded fetch. Must change this in next phase **
         const driver_address = String(response.data['location']);  //setting address into a string variable to pass into geocoder function
 
         //find location with geocode api
@@ -123,7 +123,7 @@ const MapComponent = () => {
     async function fetchData_user () { // function to fetch data of current user
       try{
         const userId = localStorage.getItem('userId');
-        const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`);
         console.log(response.data)
         user_coordinates = {lat : response.data.latitude, lng : response.data.longitude}
         console.log(user_coordinates, "happen second")

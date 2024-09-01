@@ -92,7 +92,7 @@ const Dashboard = () =>  {
     // /get-user/:id
 
     const fetchUserDetails = async () => {
-      const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`);
       setUserDetails(response.data.user);
       setIsProfileOpen(true);
     };
@@ -110,7 +110,7 @@ const Dashboard = () =>  {
       useEffect(() => {
         if(role === 'user')
         {const fetchGarbageDetails = async () => {
-          const response = await axios.get(`http://localhost:1000/user/get-garbage-details/${userId}`);
+          const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-garbage-details/${userId}`);
           setGarbageDetails(response.data.garbage);
           console.log('all garbage detatils',response.data);
         };
@@ -118,7 +118,7 @@ const Dashboard = () =>  {
         }
         if(role === 'driver'){
           const fetchAllGarbageDetails = async () => {
-            const response = await axios.get('http://localhost:1000/get-all-garbage-details');
+            const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/get-all-garbage-details`);
             setAllGarbageDetails(response.data.garbage);
             console.log('all garbages',response.data);
           };
@@ -146,7 +146,7 @@ const Dashboard = () =>  {
 
       const handlePickedUp = async (id) => {
         try {
-          await axios.put(`http://localhost:1000/garbage/update-pickup-status/${id}`, { status: 'Picked Up' });
+          await axios.put(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/garbage/update-pickup-status/${id}`, { status: 'Picked Up' });
           setDataChanged((prev) => !prev);
         } catch (err) {
           console.error('Failed to update pickup status', err);
@@ -155,7 +155,7 @@ const Dashboard = () =>  {
 
       const handlePending = async (id) => {
         try {
-          await axios.put(`http://localhost:1000/garbage/update-pickup-status/${id}`, { status: 'Pending' });
+          await axios.put(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/garbage/update-pickup-status/${id}`, { status: 'Pending' });
           setDataChanged((prev) => !prev);
         } catch (err) {
           console.error('Failed to update pickup status', err);
@@ -164,7 +164,7 @@ const Dashboard = () =>  {
 
       const handleReportIssue = async (id) => {
         try {
-          await axios.put(`http://localhost:1000/garbage/report-issue/${id}`);
+          await axios.put(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/garbage/report-issue/${id}`);
           setDataChanged((prev) => !prev);
         } catch (err) {
           console.error('Failed to report issue', err);
@@ -173,7 +173,7 @@ const Dashboard = () =>  {
 
       const handleIssueSolved = async (id) => {
         try {
-          await axios.put(`http://localhost:1000/garbage/issue-solved/${id}`);
+          await axios.put(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/garbage/issue-solved/${id}`);
           setDataChanged((prev) => !prev);
         } catch (err) {
           console.error('Failed to mark issue as solved', err);

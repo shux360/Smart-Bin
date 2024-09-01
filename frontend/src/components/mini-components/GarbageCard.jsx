@@ -61,7 +61,7 @@ const [userData,setUserData] = useState({
 useEffect(() => {
     const fetch = async () => {
         const response = await axios.get(
-            `http://localhost:1000/user/get-user/${userId}`
+            `${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`
         );
         setUserData({
             address:{
@@ -135,8 +135,7 @@ const [isEditing, setIsEditing] = useState(false);
              alert('Please fill all the fields');
          } else{
              const response = await axios.post(
-                 'http://localhost:1000/garbage-details', {userId,driverId,
-                 data} 
+                 `${import.meta.env.VITE_APP_SERVER_DOMAIN}/garbage-details`, {userId,driverId,data} 
              );
              alert(response.data.message);
              window.location.reload();

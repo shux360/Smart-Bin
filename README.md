@@ -1,4 +1,6 @@
 <h1 align="center">Smart Bin ♻️</h1>
+<p align="center">The proposed app aims to streamline the waste management process for municipal councils. It will offer a comprehensive platform for residents, garbage truck drivers, and municipal councils to coordinate garbage collection.
+</p>
   
 <h3 align="center">Backend Deployment</h3>
 <p align="center"><img src="https://res.cloudinary.com/drmeavkzg/image/upload/v1725195923/WhatsApp_Image_2024-09-01_at_17.50.04_jboxnb.jpg" alt="project"></p>
@@ -17,13 +19,15 @@
 
 <h2>🚗Driver Details</h2>
 
-> Driver is hardcoded for now
-
 > Authentication part is still in development
+
+> We have developed this system for one area and one driver, so the driver is hardcoded in the system
+
+> The area we have selected is kandy, so the base location of the driver is kandy 
 
 > To log in as a driver use following credentials
 
-  >> Email : kamal@gmail.com
+  ```Email : kamal@gmail.com```
 
 
 

@@ -16,11 +16,15 @@
 [smart-bin.com](https://smartbin-ssda.onrender.com/)
 
 <h2>🚗Driver Details</h2>
-> Driver is hardcoded for now
-> To log in use following credentials
->> Email:kamal@gmail.com
 
->> Authentication part is still in development
+> Driver is hardcoded for now
+
+> Authentication part is still in development
+
+> To log in as a driver use following credentials
+
+  >> Email : kamal@gmail.com
+
 
 
 

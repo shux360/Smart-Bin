@@ -15,7 +15,7 @@ const MapContainer = () => {
   useEffect(() => {
     const fetchDriver = async () => {
       try {
-        const response = await fetch(`http://localhost:1000/driver/drivers/${driverId}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/drivers/${driverId}`);
         
         if (response.ok) {
           const data = await response.json();

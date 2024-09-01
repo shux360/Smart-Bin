@@ -20,7 +20,7 @@ const Directions = () => {
   useEffect(() => {
     const fetchDrivers = async () => {
       try {
-        const response = await fetch('http://localhost:1000/driver/drivers');
+        const response = await fetch(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/drivers`);
         if (response.ok) {
           const data = await response.json();
           if (data.length > 0) {
@@ -44,7 +44,7 @@ const Directions = () => {
     if (driverId) {
       const fetchDriver = async () => {
         try {
-          const response = await fetch(`http://localhost:1000/driver/drivers/${driverId}`);
+          const response = await fetch(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/drivers/${driverId}`);
           if (response.ok) {
             const data = await response.json();
             setDriver(data);
@@ -66,7 +66,7 @@ const Directions = () => {
   useEffect(() => {
     const fetchGarbageLocations = async () => {
       try {
-        const response = await fetch('http://localhost:1000/get-all-garbage-details');
+        const response = await fetch(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/get-all-garbage-details`);
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data.garbage)) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiMapPin } from 'react-icons/fi';
 
@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@radix-ui/react-dropdown-menu';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 
 const Signup = () => {
@@ -44,7 +44,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:1000/user/signup', { 
+            const response = await axios.post(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/signup`, { 
                 name, 
                 email, 
                 password, 

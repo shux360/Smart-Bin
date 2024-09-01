@@ -150,7 +150,7 @@ const UserDetails = () => {
     const fetchUserDetails = async () => {
       try {
         const userId = localStorage.getItem('userId')
-        const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`)
+        const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`)
         setUser(response.data)
         setEditedUser(response.data)
         setLoading(false)
@@ -173,7 +173,7 @@ const UserDetails = () => {
   const handleSave = async () => {
     try {
       const userId = localStorage.getItem('userId')
-      await axios.put(`http://localhost:1000/user/update-user/${userId}`, editedUser)
+      await axios.put(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/update-user/${userId}`, editedUser)
       setUser(editedUser)
       setEditing(false)
     } catch (error) {

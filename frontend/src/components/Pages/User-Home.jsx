@@ -46,7 +46,7 @@ const User_home = () => {
 
   async function fetchData (driver) {  // function to fetch data of respective driver for user (in this case built to just one driver for now)
     try{
-      const response = await axios.get(`http://localhost:1000/driver/drivers/6685b51b63288da41fe6cd52`);  // ** Driver data is a hardcoded fetch. Must change this in next phase **
+      const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/drivers/6685b51b63288da41fe6cd52`);  // ** Driver data is a hardcoded fetch. Must change this in next phase **
       driver.email = response.data['email'];
       driver.name = response.data['name'];
       driver.truckNumber = response.data['truckNumber'];
@@ -61,7 +61,7 @@ const User_home = () => {
     try{
       
       const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`);
       const address = response.data.address; // get user address
       // Parse address object into a single string
       setUser_address(`${address.streetName}, ${address.city}, ${address.province}, ${address.country}, ${address.postalCode}`);

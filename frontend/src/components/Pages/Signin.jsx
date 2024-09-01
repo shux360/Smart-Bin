@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+
 import {
     Card,
     CardContent,
@@ -17,6 +18,7 @@ import { useParams } from 'react-router-dom';
 const Signin = () => {
     const { role } = useParams();
     console.log(role);
+    console.log(import.meta.env.VITE_APP_SERVER_DOMAIN);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -26,7 +28,7 @@ const Signin = () => {
         localStorage.setItem('role', role);
         try {
             if(role === 'user'){
-                const response = await axios.post('http://localhost:1000/user/signin', { email, password });
+                const response = await axios.post(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/signin`, { email, password });
             
             
             alert(response.data.message);
@@ -35,7 +37,7 @@ const Signin = () => {
             localStorage.setItem('userId', usereID);
             } 
             if(role === 'driver'){
-                const response = await axios.post('http://localhost:1000/driver/signin', { email });
+                const response = await axios.post(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/driver/signin`, { email });
                 console.log(response.data);
                 const driverID = response.data.driver._id;
                 navigate(`/dashboard/${driverID}`);// Redirect to dashboard after successful sign-in

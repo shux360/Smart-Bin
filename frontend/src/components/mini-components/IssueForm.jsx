@@ -41,7 +41,7 @@ export function ReportForm() {
     useEffect(() => {
         const fetchUserData = async () => {
           try {
-            const response = await axios.get(`http://localhost:1000/user/get-user/${userId}`);
+            const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_DOMAIN}/user/get-user/${userId}`);
             console.log('response', response);
             setUserData({
               name: response.data.name,
@@ -119,7 +119,7 @@ export function ReportForm() {
                 alert('Please fill all the fields');
             } else {
                 const response = await axios.post(
-                    'http://localhost:1000/report-issue',
+                    `${import.meta.env.VITE_APP_SERVER_DOMAIN}/report-issue`,
                     data,
                 );
                 alert(response.data.message);

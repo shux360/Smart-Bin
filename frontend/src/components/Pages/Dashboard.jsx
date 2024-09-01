@@ -124,7 +124,7 @@ const Dashboard = () =>  {
           };
           return () => fetchAllGarbageDetails();
         }
-      }, [userId,driverId,dataChanged]);
+      }, []);
 
       const filteredGarbageDetails = garbageDetails.filter(item => {
         if (filter.all) return true;
